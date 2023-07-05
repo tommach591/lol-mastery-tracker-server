@@ -99,4 +99,19 @@ router.get("/challenges/:region/:puuid", (req, res) => {
     });
 });
 
+router.get("/rotations", (req, res) => {
+  console.log(`Getting Champion Rotations`);
+  fetch(
+    `https://na1.api.riotgames.com/lol/platform/v3/champion-rotations?api_key=${API_KEY}`
+  )
+    .then((result) => {
+      result.text().then((text) => {
+        return res.json(text);
+      });
+    })
+    .catch((err) => {
+      return res.status(404).json({ rotationNotFound: "No champion rotation" });
+    });
+});
+
 module.exports = router;
