@@ -47,7 +47,7 @@ router.get("/score/:region/:summonerID", (req, res) => {
 
   console.log(`Getting Mastery Score`);
   fetch(
-    `https://${region}.api.riotgames.com/lol/champion-mastery/v4/scores/by-summoner/${summonerID}?api_key=${API_KEY}`
+    `https://${region}.api.riotgames.com/lol/champion-mastery/v4/scores/by-puuid/${summonerID}?api_key=${API_KEY}`
   )
     .then((result) => {
       result.text().then((text) => {
