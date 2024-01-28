@@ -4,12 +4,29 @@ const fetch = require("node-fetch");
 
 const API_KEY = process.env.REACT_APP_RIOT_API_KEY;
 
-router.get("/summoner/:region/:summonerName", (req, res) => {
-  const { region, summonerName } = req.params;
+router.get("/account/:region/:username/:tag", (req, res) => {
+  const { region, username, tag } = req.params;
+  console.log(`Getting User`);
+  fetch(
+    `https://${region}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${username}/${tag}?api_key=${API_KEY}`
+  )
+    .then((result) => {
+      result.text().then((text) => {
+        return res.json(text);
+      });
+    })
+    .catch((err) => {
+      return res
+        .status(404)
+        .json({ userNotFound: "No user found in that region" });
+    });
+});
 
+router.get("/summoner/:region/:puuid", (req, res) => {
+  const { region, puuid } = req.params;
   console.log(`Getting Summoner`);
   fetch(
-    `https://${region}.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}?api_key=${API_KEY}`
+    `https://${region}.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${puuid}?api_key=${API_KEY}`
   )
     .then((result) => {
       result.text().then((text) => {
@@ -19,16 +36,15 @@ router.get("/summoner/:region/:summonerName", (req, res) => {
     .catch((err) => {
       return res
         .status(404)
-        .json({ summonerNotFound: "No summoner found in that region" });
+        .json({ userNotFound: "No user found in that region" });
     });
 });
 
-router.get("/mastery/:region/:summonerID", (req, res) => {
-  const { region, summonerID } = req.params;
-
+router.get("/mastery/:region/:puuid", (req, res) => {
+  const { region, puuid } = req.params;
   console.log(`Getting Mastery`);
   fetch(
-    `https://${region}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/${summonerID}?api_key=${API_KEY}`
+    `https://${region}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/${puuid}?api_key=${API_KEY}`
   )
     .then((result) => {
       result.text().then((text) => {
@@ -38,16 +54,16 @@ router.get("/mastery/:region/:summonerID", (req, res) => {
     .catch((err) => {
       return res
         .status(404)
-        .json({ summonerNotFound: "No summoner found in that region" });
+        .json({ userNotFound: "No user found in that region" });
     });
 });
 
-router.get("/score/:region/:summonerID", (req, res) => {
-  const { region, summonerID } = req.params;
+router.get("/score/:region/:puuid", (req, res) => {
+  const { region, puuid } = req.params;
 
   console.log(`Getting Mastery Score`);
   fetch(
-    `https://${region}.api.riotgames.com/lol/champion-mastery/v4/scores/by-puuid/${summonerID}?api_key=${API_KEY}`
+    `https://${region}.api.riotgames.com/lol/champion-mastery/v4/scores/by-puuid/${puuid}?api_key=${API_KEY}`
   )
     .then((result) => {
       result.text().then((text) => {
@@ -57,7 +73,7 @@ router.get("/score/:region/:summonerID", (req, res) => {
     .catch((err) => {
       return res
         .status(404)
-        .json({ summonerNotFound: "No summoner found in that region" });
+        .json({ userNotFound: "No user found in that region" });
     });
 });
 
@@ -76,7 +92,7 @@ router.get("/mission/:region", (req, res) => {
     .catch((err) => {
       return res
         .status(404)
-        .json({ summonerNotFound: "No summoner found in that region" });
+        .json({ userNotFound: "No user found in that region" });
     });
 });
 
@@ -95,7 +111,7 @@ router.get("/challenges/:region/:puuid", (req, res) => {
     .catch((err) => {
       return res
         .status(404)
-        .json({ summonerNotFound: "No summoner found in that region" });
+        .json({ userNotFound: "No user found in that region" });
     });
 });
 
